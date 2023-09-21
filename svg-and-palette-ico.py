@@ -81,7 +81,7 @@ def rasterize_svg_with_palette(svg_file, palette):
     with Image.open(png_output) as im:
         # im = im.resize((256, 256))
         im = im.convert("RGBA")
-        im = im.quantize(colors=palette)
+        im = im.quantize(colors=palette, method=3)
         im.save(png_output)
     return png_output
 
@@ -90,7 +90,7 @@ def downsample_and_create_ico(png_file, palette, sizes):
     with Image.open(png_file) as im:
         im = im.convert("RGBA")
         ico_output = png_file.replace(".png", ".ico")
-        images = [im.resize((i, i)).quantize(colors=palette, method=2) for i in sizes]
+        images = [im.resize((i, i)).quantize(colors=palette, method=3) for i in sizes]
         images[-1].save(
             ico_output,
             format="ICO",
@@ -111,10 +111,10 @@ def downsample_and_create_ico(png_file, palette, sizes):
 def downsample_png(png_file, palette, sizes):
     with Image.open(png_file) as im:
         for i in sizes:
-            im.resize((i, i)).quantize(colors=palette, method=2).save(
+            im.resize((i, i)).quantize(colors=palette, method=3).save(
                 png_file.replace(".png", f"-{i}.png")
             )
-            im.resize((i, i)).quantize(colors=palette, method=2).save(
+            im.resize((i, i)).quantize(colors=palette, method=3).save(
                 png_file.replace(".png", f"-{i}.ico"), format="ICO", sizes=[(i, i)]
             )
 
